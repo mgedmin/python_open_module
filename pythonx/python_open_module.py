@@ -35,7 +35,8 @@ class PyModuleOpener(object):
 
     def get_imports(self):
         source = vim.current.buffer[:]
-        _source = [line.strip() for line in source if line.strip().startswith(('import', 'from'))]
+        # XXX: doesn't handle multi-line imports!
+        _source = [line.strip() for line in source if line.strip().startswith(('import ', 'from '))]
         if _source:
             tree = ast.parse('\n'.join(_source))
             self.visitor.visit(tree)
