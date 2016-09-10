@@ -46,8 +46,8 @@ class PyModuleOpener(object):
         imports = self.get_imports()
         if imports:
             for _mod, _real in imports.items():
-                if modname.startswith(_mod):
-                    real_mod = _real + modname.split(_mod)[-1]
+                if modname == _mod or modname.startswith(_mod + '.'):
+                    real_mod = _real + modname.partition(_mod)[-1]
                     return real_mod
 
     def importmod(self, modname):
@@ -103,6 +103,7 @@ class PyModuleOpener(object):
             vim.command('echohl ErrorMsg | echomsg "%s" | echohl None' % msg)
             return None, None
         except Exception:
+            raise
             msg = 'Cannot open source, maybe it is not a valid module, class or function.'
             vim.command('echohl ErrorMsg | echomsg "%s" | echohl None' % msg)
             return None, None
