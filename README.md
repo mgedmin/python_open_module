@@ -32,3 +32,4 @@ Changes in my fork:
 
 - support +python3
 - rewritten README to be in Markdown
+- some bugfixes
