@@ -107,7 +107,8 @@ class PyModuleOpener(object):
             vim.command('echohl ErrorMsg | echomsg "%s" | echohl None' % msg)
             return None, None
         except Exception:
-            raise
+            if int(vim.eval('&verbose')) > 1:
+                raise
             msg = 'Cannot open source, maybe it is not a valid module, class or function.'
             vim.command('echohl ErrorMsg | echomsg "%s" | echohl None' % msg)
             return None, None
