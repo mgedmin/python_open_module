@@ -35,12 +35,16 @@ class PyModuleOpener(object):
 
     def get_imports(self):
         source = vim.current.buffer[:]
-        # XXX: doesn't handle multi-line imports!
-        _source = [line.strip() for line in source if line.strip().startswith(('import ', 'from '))]
-        if _source:
-            tree = ast.parse('\n'.join(_source))
-            self.visitor.visit(tree)
-            return self.visitor.imports
+        for line in source:
+            # XXX: ignores multi-line imports instead of handling them
+            if line.strip().startswith(('import ', 'from ')):
+                try:
+                    tree = ast.parse(line.lstrip())
+                except SyntaxError:
+                    pass
+                else:
+                    self.visitor.visit(tree)
+        return self.visitor.imports
 
     def get_real_mod(self, modname):
         imports = self.get_imports()
